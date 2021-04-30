@@ -19,5 +19,17 @@ namespace GardenJournalDemoApp.InterfacesAbstractClasses
             }
             return null;
         }
+
+        public static Plant FindByName(this ObservableCollection<Plant> list, string name)
+        {
+            foreach(Plant p in list)
+            {
+                if (p.Name.Equals(name))
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
     }
 }

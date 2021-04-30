@@ -1,5 +1,7 @@
 ﻿using GardenJournalDemoApp.InterfacesAbstractClasses;
 using GardenJournalDemoApp.Models;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -9,6 +11,10 @@ namespace GardenJournalDemoApp.ViewModels
     class GardenViewModel : BaseViewModel
     {
         INavigationService _Nav;
+
+        IDialogueService _Dia;
+
+        AddItemViewModel AddModel;
 
         string _Name;
 
@@ -34,9 +40,9 @@ namespace GardenJournalDemoApp.ViewModels
             }
         }
 
-        ObservableCollection<IHarvestable> _Plants;
+        ObservableCollection<Plant> _Plants;
 
-        public ObservableCollection<IHarvestable> Plants
+        public ObservableCollection<Plant> Plants
         {
             get => _Plants;
             set
@@ -52,9 +58,11 @@ namespace GardenJournalDemoApp.ViewModels
 
         public ICommand RemoveHarvestableCommand { get; private set; }
 
-        public GardenViewModel(Garden garden, INavigationService nav)
+        public GardenViewModel(Garden garden, INavigationService nav, IDialogueService dia)
         {
             _Nav = nav;
+            _Dia = dia;
+            AddModel = new AddItemViewModel(_Nav, _Dia);
             Name = garden.Name;
             Size = garden.Size;
             Plants = garden.Harvestables;
@@ -65,19 +73,46 @@ namespace GardenJournalDemoApp.ViewModels
 
         void HarvestableSelect(object obj)
         {
-            Plant plant = (Plant)obj;
-            _Nav.NavigateTo(new HarvestableViewModel(plant));
+            // Feature coming soon :)
         }
 
 
         void AddHarvestable(object obj)
-        { 
-
+        {
+            AddModel.ItemAdded += ItemAdded;
+            _Nav.NavigateTo(AddModel);
         }
 
-        void RemoveHarvestable(object obj)
+        void ItemAdded(object sender, SelectedItemEventArgs e)
         {
+            Plant plant = (Plant)e.Selected;
+            if(Plants == null)
+            {
+                Plants = new ObservableCollection<Plant>();
+            }
+            Plants.Add(plant);
+            AddModel.ItemAdded -= ItemAdded;
+        }
 
+        async void RemoveHarvestable(object obj)
+        {
+            var names = GetHarvestableNames();
+            string toRemove = await _Dia.DisplayActionSheet("Select Item To Remove", "Cancel", null, names);
+            if (!String.IsNullOrEmpty(toRemove))
+            {
+                Plant plant = Plants.FindByName(toRemove);
+                Plants.Remove(plant);
+            }
+        }
+
+        string [] GetHarvestableNames()
+        {
+            List<string> names = new List<string>();
+            foreach(Plant h in Plants)
+            {
+                names.Add(h.Name);
+            }
+            return names.ToArray();
         }
 
 

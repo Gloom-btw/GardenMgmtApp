@@ -6,6 +6,6 @@ namespace GardenJournalDemoApp.InterfacesAbstractClasses
 {
     public class SelectedItemEventArgs : EventArgs
     {
-        public object ToRemove { get; set; }
+        public object Selected { get; set; }
     }
 }

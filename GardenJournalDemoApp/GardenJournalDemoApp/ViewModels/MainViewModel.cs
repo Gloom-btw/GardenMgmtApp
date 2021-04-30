@@ -2,13 +2,9 @@
 using GardenJournalDemoApp.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
-using System.Threading.Tasks;
-using GardenJournalDemoApp.Services;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
-using Rg.Plugins.Popup;
 
 
 namespace GardenJournalDemoApp.ViewModels
@@ -19,7 +15,7 @@ namespace GardenJournalDemoApp.ViewModels
         IDialogueService _Dia;
         INavigationService _Nav;
         ObservableCollection<Garden> _Gardens;
-        BaseViewModel AddModel;
+        AddGardenViewModel AddModel;
 
         public ObservableCollection<Garden> Gardens 
         {
@@ -42,18 +38,25 @@ namespace GardenJournalDemoApp.ViewModels
             _Service = service;
             _Dia = dia;
             _Nav = nav;
+            AddModel = new AddGardenViewModel(_Dia, _Nav);
             PopGarden();
             SetDataModelType(typeof(GardenList));
             AddGardenCommand = new Command(AddGarden, CanExecute);
             RemoveGardenCommand = new Command(RemoveGarden, CanExecute);
             GardenSelectedCommand = new Command(GardenSelected, CanExecuteSelected);
-
         }
 
         void AddGarden()
         {
-            
-            _Dia.ShowMessage("Add Garden", " ", "Ok");
+            AddModel.ItemAdded += GardenAdded;
+            _Nav.NavigateTo(AddModel);
+        }
+
+        void GardenAdded(object sender, SelectedItemEventArgs e)
+        {
+            Garden garden = (Garden)e.Selected;
+            Gardens.Add(garden);
+            AddModel.ItemAdded -= GardenAdded;
         }
 
         async void RemoveGarden()
@@ -65,14 +68,12 @@ namespace GardenJournalDemoApp.ViewModels
                 Garden garden = Gardens.FindByName(toRemove);
                 Gardens.Remove(garden);
             }
-            //Gardens = _Gardens;
-            //OnPropertyChanged("Gardens");
         }
 
         async void GardenSelected(object obj)
         {
             Garden selectedItem = (Garden)obj;
-            await _Nav.NavigateTo(new GardenViewModel(selectedItem, _Nav));
+            await _Nav.NavigateTo(new GardenViewModel(selectedItem, _Nav, _Dia));
         }
             
 
@@ -105,7 +106,7 @@ namespace GardenJournalDemoApp.ViewModels
                 Length = 14,
                 Width = 14,
                 Image = ImageSource.FromFile("otr.png"),
-                Harvestables = new ObservableCollection<IHarvestable> { 
+                Harvestables = new ObservableCollection<Plant> { 
                 new Fruit { Name = "Strawberries", DatePlanted = DateTime.Today.Date, DaysToHarvest = 60, 
                     Image = ImageSource.FromFile("strawberries.png")},
                 new Vegtable {Name = "Beans", DatePlanted = DateTime.Today.Date, DaysToHarvest = 90, Image = ImageSource.FromFile("beans.png") },
@@ -120,7 +121,7 @@ namespace GardenJournalDemoApp.ViewModels
                 Length = 14,
                 Width = 14,
                 Image = ImageSource.FromFile("otr.png"),
-                Harvestables = new ObservableCollection<IHarvestable> { 
+                Harvestables = new ObservableCollection<Plant> { 
                 new Fruit { Name = "Strawberries", DatePlanted = DateTime.Today.Date, DaysToHarvest = 60,
                     Image = ImageSource.FromFile("strawberries.png")},
                 new Vegtable {Name = "Beans", DatePlanted = DateTime.Today.Date, DaysToHarvest = 90, Image = ImageSource.FromFile("beans.png") },
@@ -135,7 +136,7 @@ namespace GardenJournalDemoApp.ViewModels
                 Length = 14,
                 Width = 14,
                 Image = ImageSource.FromFile("otr.png"),
-                Harvestables = new ObservableCollection<IHarvestable> { 
+                Harvestables = new ObservableCollection<Plant> { 
                 new Fruit { Name = "Strawberries", DatePlanted = DateTime.Today.Date, DaysToHarvest = 60,
                     Image = ImageSource.FromFile("strawberries.png")},
                 new Vegtable {Name = "Beans", DatePlanted = DateTime.Today.Date, DaysToHarvest = 90, Image = ImageSource.FromFile("beans.png") },
@@ -150,7 +151,7 @@ namespace GardenJournalDemoApp.ViewModels
                 Length = 14,
                 Width = 14,
                 Image = ImageSource.FromFile("otr.png"),
-                Harvestables = new ObservableCollection<IHarvestable> { 
+                Harvestables = new ObservableCollection<Plant> { 
                 new Fruit { Name = "Strawberries", DatePlanted = DateTime.Today.Date, DaysToHarvest = 60,
                     Image = ImageSource.FromFile("strawberries.png")},
                 new Vegtable {Name = "Beans", DatePlanted = DateTime.Today.Date, DaysToHarvest = 90, Image = ImageSource.FromFile("beans.png") },

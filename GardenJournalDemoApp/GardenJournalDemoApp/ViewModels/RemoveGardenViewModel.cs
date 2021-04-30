@@ -13,8 +13,6 @@ namespace GardenJournalDemoApp.ViewModels
     {
         ObservableCollection<Garden> _GardenNames;
 
-        INavigationService _Nav;
-
         public ObservableCollection<Garden> GardenNames
         {
             get => _GardenNames;
@@ -27,7 +25,7 @@ namespace GardenJournalDemoApp.ViewModels
 
         public ICommand RemoveGardenCommand { get; private set; }
 
-        public RemoveGardenViewModel(ObservableCollection<Garden> gardens, INavigationService nav)
+        public RemoveGardenViewModel(ObservableCollection<Garden> gardens)
         {
             _GardenNames = gardens;
             RemoveGardenCommand = new Command(RemoveGarden);
@@ -35,7 +33,7 @@ namespace GardenJournalDemoApp.ViewModels
 
         void RemoveGarden(object obj)
         {
-            ItemSelected(this, new SelectedItemEventArgs {ToRemove = obj});
+            ItemSelected(this, new SelectedItemEventArgs {Selected = obj});
         }
 
         public event EventHandler<SelectedItemEventArgs> ItemSelected;
