@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="GardenJournalDemoApp.Pages.MainView">
+
+    <Grid BackgroundColor="{StaticResource Backgrounds}">
+		<Grid Margin="10,10,10,10" BackgroundColor="Transparent">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="3*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+            <Label Grid.Row="0" Text="Garden Management" Style="{StaticResource LabelTitle}" HorizontalOptions="Center"/>
+            <CollectionView x:Name="cv_Gardens" Grid.Column="0" Grid.Row="1" ItemTemplate="{StaticResource GardenCollectionView}" VerticalOptions="Center" HorizontalOptions="Center"
+                            ItemsSource="{Binding Gardens, Mode=TwoWay}" SelectionChangedCommand="{Binding GardenSelectedCommand}" SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference cv_Gardens}}"
+                            SelectionMode="Single">
+				<CollectionView.ItemsLayout>
+					<GridItemsLayout Orientation="Horizontal" HorizontalItemSpacing="10"/>
+				</CollectionView.ItemsLayout>
+			</CollectionView>
+
+			<Grid Grid.Column="0" Grid.Row="2" Margin="30,5,30,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
+
+				<Button  Grid.Column="0" Grid.Row="2" Text="Add Garden" CornerRadius="10" Command="{Binding AddGardenCommand}" BackgroundColor="{StaticResource Surfaces}"/>
+                <Button Grid.Column="1" Grid.Row="2" Text="Remove Garden" CornerRadius="10" Command="{Binding RemoveGardenCommand}" BackgroundColor="{StaticResource Surfaces}"/>
+			</Grid>
+		</Grid>
+	</Grid>
+</ContentPage>

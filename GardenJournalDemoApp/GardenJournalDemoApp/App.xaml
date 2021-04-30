@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GardenJournalDemoApp.App">
+    <Application.Resources>
+		<!--Colors-->
+		<Color x:Key="Surfaces">#f2f2f2</Color>
+		<Color x:Key="TextColorLabel">#0C2340</Color>
+        <Color x:Key="Backgrounds">#bababa</Color>
+
+
+		<!--Styles-->
+		<Style x:Key="LabelTitle" TargetType="Label">
+			<Setter Property="FontSize" Value="20" />
+			<Setter Property="TextColor" Value="{DynamicResource TextColorLabel}" />
+		</Style>
+
+        <Style x:Key="LabelSmall" TargetType="Label">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="TextColor" Value="{DynamicResource TextColorLabel}" />
+        </Style>
+
+
+
+        <!--Data Templates-->
+		<DataTemplate x:Key="GardenCollectionView">
+            <Frame CornerRadius="5" BackgroundColor="{DynamicResource Surfaces}" BorderColor="Transparent">
+                <StackLayout Spacing="10">
+                    <Label Text="{Binding Name}" Style="{DynamicResource LabelTitle}"/>
+                </StackLayout>
+			</Frame>
+		</DataTemplate>
+
+        <DataTemplate x:Key="HarvestableCollectionView">
+            <Frame BackgroundColor="White" CornerRadius="10">
+                <StackLayout Spacing="5" Grid.Row="1">
+                    <Frame Grid.Row="0" BackgroundColor="Transparent" CornerRadius="10">
+                        <Image Source="{Binding Image}" Aspect="AspectFit"/>
+                    </Frame>
+                    <Label Text="{Binding Name}" Style="{DynamicResource LabelSmall}"/>
+                    <Label Text="{Binding DatePlanted, StringFormat='Date Planted: {0}'}" Style="{DynamicResource LabelSmall}"/>
+                    <Label Text="{Binding DaysToHarvest, StringFormat='Days to Harvest: {0}'}" Style="{DynamicResource LabelSmall}"/>
+                    <Label Text="{Binding HarvestDate, StringFormat='Est. Harvest Date: {0}'}" Style="{DynamicResource LabelSmall}"/>
+                </StackLayout>
+            </Frame>
+        </DataTemplate>
+    </Application.Resources>
+</Application>

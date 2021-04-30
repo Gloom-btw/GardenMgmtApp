@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GardenJournalDemoApp.Pages.GardenView">
+    <ContentPage.Content>
+        <Grid BackgroundColor="{StaticResource Surfaces}">
+            <Grid Margin="10,10,10,10" BackgroundColor="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="{Binding Name}" Style="{StaticResource LabelTitle}" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center"/>
+                <Label Text="{Binding Size, StringFormat='{0} ft Plot'}" Style="{StaticResource LabelTitle}" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center"/>
+
+                <CollectionView x:Name="cv_Harvestables" Grid.Row="1" ItemsSource="{Binding Plants}" 
+                                ItemTemplate="{StaticResource HarvestableCollectionView}" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="Start" SelectionMode="Single"
+                                SelectionChangedCommand="{Binding HarvestableSelectCommand}" SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference cv_Harvestables}}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+
+                <Button  Grid.Column="0" Grid.Row="2" Text="Add Item" CornerRadius="10" Command="{Binding AddItemCommand}" BackgroundColor="{StaticResource Surfaces}"/>
+                <Button Grid.Column="1" Grid.Row="2" Text="Remove Item" CornerRadius="10" Command="{Binding RemoveItemCommand}" BackgroundColor="{StaticResource Surfaces}"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
